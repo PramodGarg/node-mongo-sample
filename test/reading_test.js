@@ -13,7 +13,7 @@ describe('Reading user from the database', () => {
 
     it('find all the users with name  as Joe', (done) => {
         User.find({ name : 'Joe'}).then((users) => {
-            assert(users[0]._id.toString() == joe._id.toString())
+            assert(users[0]._id.toString() === joe._id.toString())
             done()
         })
     })
@@ -25,4 +25,6 @@ describe('Reading user from the database', () => {
             done();
           });
       });
+
+
 });
