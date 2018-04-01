@@ -1,14 +1,17 @@
 const assert = require('assert')
 const User = require('../src/user')
 
-let joe;
+let joe, alex, maria, zach;
 describe('Reading user from the database', () => {
 
     beforeEach((done) => {
         joe = new User({ name : "Joe" })
-        joe.save().then(() => {    
-            done()
-        });
+        alex = new User({ name : "Alex" })
+        maria = new User({ name : "Maria" })
+        zach = new User({ name : "Zach" })
+
+        Promise.all([joe.save(), alex.save(), maria.save(), zach.save()])
+                .then(() => done());
     })
 
     it('find all the users with name  as Joe', (done) => {
@@ -26,5 +29,16 @@ describe('Reading user from the database', () => {
           });
       });
 
-
+      it('fetches users using pagination', (done) => {
+        User.find({})
+            .sort({name: 1})
+            .skip(1)
+            .limit(2)
+            .then((users) => {
+              assert(users.length === 2);
+              assert(users[0]._id.toString() === joe._id.toString());
+              assert(users[1]._id.toString() === maria._id.toString());
+              done();
+          });
+      });
 });
